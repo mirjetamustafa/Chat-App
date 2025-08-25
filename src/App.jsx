@@ -1,22 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
-  return (
-    <Router>
-      <div className="app">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <h1 className="text-red-500 text-3xl font-bold">Chat App</h1>
-              </>
-            }
-          />
-        </Routes>
-      </div>
-    </Router>
-  )
+  const [count, setCount] = useState(0)
+
+  return <div className="text-red-500">Hello</div>
 }
 
 export default App
