@@ -4,7 +4,7 @@ import MessageInput from '../components/MessageInput'
 
 const ChatRoom = () => {
   const [darkMode, setDarkMode] = useState(false)
-  const [chat, setChat] = useState('conversatiion')
+  const [chat, setChat] = useState('conversation')
 
   useEffect(() => {
     if (darkMode) {
@@ -16,7 +16,7 @@ const ChatRoom = () => {
 
   return (
     <div className="md:flex bg-white text-black dark:bg-gray-900 dark:text-white min-h-screen">
-      <div className="w-64 bg-blue-500 ">
+      <div className="w-64 ">
         <Sidebar
           darkMode={darkMode}
           setDarkMode={setDarkMode}
@@ -24,7 +24,7 @@ const ChatRoom = () => {
           setChat={setChat}
         />
       </div>
-      <div className="flex-1 bg-red-500 m-2">
+      <div className="flex-1 ">
         <MessageInput chat={chat} setChat={setChat} />
       </div>
     </div>
