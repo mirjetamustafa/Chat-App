@@ -2,7 +2,7 @@ import { MdOutlineLightMode } from 'react-icons/md'
 import { MdOutlineDarkMode } from 'react-icons/md'
 import { CiSettings } from 'react-icons/ci'
 
-const Sidebar = ({ darkMode, setDarkMode }) => {
+const Sidebar = ({ darkMode, setDarkMode, chat, setChat }) => {
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-800 dark:text-white border dark:border-gray-700">
       <div className="flex justify-between px-4 pt-6 pb-3">
@@ -65,7 +65,10 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
           Conversations
         </h4>
 
-        <div className="mt-4 hover:bg-gray-100 p-2 cursor-pointer">
+        <div
+          className="mt-4 hover:bg-gray-100 p-2 cursor-pointer"
+          onClick={() => setChat('conversation')}
+        >
           <div className="flex justify-between">
             <div className="flex relative">
               <img
@@ -93,7 +96,10 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
           </div>
         </div>
 
-        <div className="mt-4 hover:bg-gray-100 p-2 cursor-pointer">
+        <div
+          className="mt-4 hover:bg-gray-100 p-2 cursor-pointer"
+          onClick={() => setChat('conversation2')}
+        >
           <div className="flex justify-between">
             <div className="flex relative">
               <img
@@ -105,7 +111,9 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
               <span className="absolute bottom-0 left-9 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
 
               <div className="">
-                <h2 className="font-semibold text-sm ml-2 mt-1">Michae Chen</h2>
+                <h2 className="font-semibold text-sm ml-2 mt-1">
+                  Michael Chen
+                </h2>
                 <h2 className="text-xs text-blue-400 ml-2 mt-1">Typing...</h2>
               </div>
             </div>
@@ -117,7 +125,10 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
           </div>
         </div>
 
-        <div className="mt-4 hover:bg-gray-100 p-2 cursor-pointer">
+        <div
+          className="mt-4 hover:bg-gray-100 p-2 cursor-pointer"
+          onClick={() => setChat('conversation3')}
+        >
           <div className="flex justify-between">
             <div className="flex relative">
               <img
@@ -130,10 +141,10 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
 
               <div className="">
                 <h2 className="font-semibold text-sm ml-2 mt-1">
-                  Emiy Rodriguez
+                  Emily Rodriguez
                 </h2>
                 <h2 className="text-xs text-gray-400 ml-2 mt-1">
-                  Emiy Rodriguez
+                  Emily Rodriguez
                 </h2>
               </div>
             </div>
@@ -145,7 +156,10 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
           </div>
         </div>
 
-        <div className="mt-4 hover:bg-gray-100 p-2 cursor-pointer">
+        <div
+          className="mt-4 hover:bg-gray-100 p-2 cursor-pointer"
+          onClick={() => setChat('conversation4')}
+        >
           <div className="flex justify-between">
             <div className="flex relative">
               <img
@@ -171,7 +185,10 @@ const Sidebar = ({ darkMode, setDarkMode }) => {
           </div>
         </div>
 
-        <div className="mt-4 hover:bg-gray-100 p-2 cursor-pointer">
+        <div
+          className="mt-4 hover:bg-gray-100 p-2 cursor-pointer"
+          onClick={() => setChat('conversation5')}
+        >
           <div className="flex justify-between">
             <div className="flex relative">
               <img
