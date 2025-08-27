@@ -4,8 +4,11 @@ import { VscInfo } from 'react-icons/vsc'
 import { GrAttachment } from 'react-icons/gr'
 import { GrEmoji } from 'react-icons/gr'
 import { FiSend } from 'react-icons/fi'
+import EmojiPicker from 'emoji-picker-react'
+import { useState } from 'react'
 
 const MessageInput = ({ chat, setChat }) => {
+  const [openEmoji, setOpenEmoji] = useState(true)
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white ">
       {chat === 'conversation' ? (
@@ -44,13 +47,13 @@ const MessageInput = ({ chat, setChat }) => {
 
           <div className="m-2">
             <form>
-              <label for="chat" class="sr-only">
+              <label for="chat" className="sr-only">
                 Type message
               </label>
-              <div class="flex items-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+              <div className="flex items-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700">
                 <button
                   type="button"
-                  class="inline-flex justify-center p-2 text-gray-500 rounded-full cursor-pointer hover:text-gray-900 hover:bg-gray-200 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  className="inline-flex justify-center p-2 text-gray-500 rounded-full cursor-pointer hover:text-gray-900 hover:bg-gray-200 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                 >
                   <GrAttachment />
                 </button>
@@ -58,21 +61,30 @@ const MessageInput = ({ chat, setChat }) => {
                 <textarea
                   id="chat"
                   rows="1"
-                  class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-gray-100  outline-none dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white"
+                  className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-gray-100  outline-none dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Type message..."
                 ></textarea>
+                <div className="">
+                  <button
+                    type="button"
+                    onClick={() => setOpenEmoji((prev) => !prev)}
+                    className="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600"
+                  >
+                    <GrEmoji size={20} />
+                  </button>
+                  {openEmoji && (
+                    <div className=" bottom-12 left-0">
+                      <EmojiPicker />
+                    </div>
+                  )}
+                </div>
+
                 <button
                   type="submit"
-                  class="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600"
-                >
-                  <GrEmoji size={20} />
-                </button>
-                <button
-                  type="submit"
-                  class="inline-flex justify-center p-2 text-white bg-blue-600 rounded-full cursor-pointer hover:bg-blue-700 dark:text-white dark:hover:bg-blue-700"
+                  className="inline-flex justify-center p-2 text-white bg-blue-600 rounded-full cursor-pointer hover:bg-blue-700 dark:text-white dark:hover:bg-blue-700"
                 >
                   <FiSend />
-                  <span class="sr-only">Send message</span>
+                  <span className="sr-only">Send message</span>
                 </button>
               </div>
             </form>
