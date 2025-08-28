@@ -8,9 +8,16 @@ import EmojiPicker from 'emoji-picker-react'
 import { useState } from 'react'
 
 const MessageInput = ({ chat, setChat }) => {
-  const [openEmoji, setOpenEmoji] = useState(true)
+  const [openEmoji, setOpenEmoji] = useState(false)
+  const [text, setText] = useState('')
+
+  const handleEmoji = (e) => {
+    setText((prev) => prev + e.emoji)
+    setOpenEmoji(false)
+  }
+
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white ">
+    <div className="min-h-screen bg-white text-black dark:bg-gray-800 dark:text-white ">
       {chat === 'conversation' ? (
         <>
           <div className="flex justify-between px-5 py-3 dark:bg-gray-800 dark:text-white">
@@ -45,9 +52,120 @@ const MessageInput = ({ chat, setChat }) => {
 
           <hr className="dark:border-gray-700" />
 
-          <div className="m-2">
-            <form>
-              <label for="chat" className="sr-only">
+          <div className=" flex flex-col content-between">
+            <div className="h-[500px] overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+              <div className="flex justify-start">
+                <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
+                  <p className="m-2">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum illo maxime voluptatem recusandae saepe, distinctio,
+                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
+                    Voluptas rem corrupti perferendis sequi!
+                  </p>
+                  <span className="flex justify-end text-xs text-gray-400 mt-1">
+                    11:45 PM
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-end m-3">
+                <div className="max-w-[70%]  rounded-lg p-3 bg-blue-500 dark:text-white shadow-sm">
+                  <p className="text-white">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum illo maxime voluptatem recusandae saepe, distinctio,
+                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
+                    Voluptas rem corrupti perferendis sequi!
+                  </p>
+                  <span className="flex justify-end text-xs text-blue-300 mt-1">
+                    11:45 PM
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-start">
+                <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
+                  <p className="m-2">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum illo maxime voluptatem recusandae saepe, distinctio,
+                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
+                    Voluptas rem corrupti perferendis sequi!
+                  </p>
+                  <span className="flex justify-end text-xs text-gray-400 mt-1">
+                    11:45 PM
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-end m-3">
+                <div className="max-w-[70%]  rounded-lg p-3 bg-blue-500 dark:text-white shadow-sm">
+                  <p className="text-white">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum illo maxime voluptatem recusandae saepe, distinctio,
+                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
+                    Voluptas rem corrupti perferendis sequi!
+                  </p>
+                  <span className="flex justify-end text-xs text-blue-300 mt-1">
+                    11:45 PM
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-start">
+                <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
+                  <p className="m-2">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum illo maxime voluptatem recusandae saepe, distinctio,
+                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
+                    Voluptas rem corrupti perferendis sequi!
+                  </p>
+                  <span className="flex justify-end text-xs text-gray-400 mt-1">
+                    11:45 PM
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-end m-3">
+                <div className="max-w-[70%]  rounded-lg p-3 bg-blue-500 dark:text-white shadow-sm">
+                  <p className="text-white">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum illo maxime voluptatem recusandae saepe, distinctio,
+                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
+                    Voluptas rem corrupti perferendis sequi!
+                  </p>
+                  <span className="flex justify-end text-xs text-blue-300 mt-1">
+                    11:45 PM
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-start">
+                <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
+                  <p className="m-2">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum illo maxime voluptatem recusandae saepe, distinctio,
+                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
+                    Voluptas rem corrupti perferendis sequi!
+                  </p>
+                  <span className="flex justify-end text-xs text-gray-400 mt-1">
+                    11:45 PM
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-end m-3">
+                <div className="max-w-[70%]  rounded-lg p-3 bg-blue-500 dark:text-white shadow-sm">
+                  <p className="text-white">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum illo maxime voluptatem
+                  </p>
+                  <span className="flex justify-end text-xs text-blue-300 mt-1">
+                    11:45 PM
+                  </span>
+                </div>
+              </div>
+            </div>
+            <form className="m-5">
+              <label htmlFor="chat" className="sr-only">
                 Type message
               </label>
               <div className="flex items-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700">
@@ -58,23 +176,28 @@ const MessageInput = ({ chat, setChat }) => {
                   <GrAttachment />
                 </button>
 
-                <textarea
+                <input
                   id="chat"
                   rows="1"
+                  value={text}
                   className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-gray-100  outline-none dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Type message..."
-                ></textarea>
+                  onChange={(e) => setText(e.target.value)}
+                />
                 <div className="">
                   <button
                     type="button"
                     onClick={() => setOpenEmoji((prev) => !prev)}
-                    className="inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600"
+                    className="realtive inline-flex justify-center p-2 text-gray-600 rounded-full cursor-pointer hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600"
                   >
                     <GrEmoji size={20} />
                   </button>
                   {openEmoji && (
-                    <div className=" bottom-12 left-0">
-                      <EmojiPicker />
+                    <div className="absolute bottom-20 mb-12 right-2">
+                      <EmojiPicker
+                        onEmojiClick={handleEmoji}
+                        className="dark:bg-gray-800 dark:border-gray-800"
+                      />
                     </div>
                   )}
                 </div>
