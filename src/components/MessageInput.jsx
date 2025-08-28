@@ -53,8 +53,15 @@ const MessageInput = ({ chat, setChat }) => {
           <hr className="dark:border-gray-700" />
 
           <div className=" flex flex-col content-between">
-            <div className="h-[500px] overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+            <div className="h-[550px] overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
               <div className="flex justify-start">
+                <div className="mr-4 ">
+                  <img
+                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                    className=" rounded-full w-[50px] h-[50px]"
+                  />
+                </div>
                 <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
                   <p className="m-2">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -83,6 +90,13 @@ const MessageInput = ({ chat, setChat }) => {
               </div>
 
               <div className="flex justify-start">
+                <div className="mr-4 ">
+                  <img
+                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                    className=" rounded-full w-[50px] h-[50px]"
+                  />
+                </div>
                 <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
                   <p className="m-2">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -111,6 +125,13 @@ const MessageInput = ({ chat, setChat }) => {
               </div>
 
               <div className="flex justify-start">
+                <div className="mr-4 ">
+                  <img
+                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                    className=" rounded-full w-[50px] h-[50px]"
+                  />
+                </div>
                 <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
                   <p className="m-2">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -139,6 +160,13 @@ const MessageInput = ({ chat, setChat }) => {
               </div>
 
               <div className="flex justify-start">
+                <div className="mr-4 ">
+                  <img
+                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                    className=" rounded-full w-[50px] h-[50px]"
+                  />
+                </div>
                 <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
                   <p className="m-2">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
