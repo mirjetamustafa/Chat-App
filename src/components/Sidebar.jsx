@@ -1,9 +1,12 @@
 import { MdOutlineLightMode } from 'react-icons/md'
 import { MdOutlineDarkMode } from 'react-icons/md'
 import { CiSettings } from 'react-icons/ci'
+import { MdOutlineLogout } from 'react-icons/md'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const Sidebar = ({ darkMode, setDarkMode, chat, setChat }) => {
+  const [dropDown, setDropDown] = useState(false)
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-800 dark:text-white border dark:border-gray-700">
       <div className="flex justify-between px-4 pt-6 pb-3">
@@ -23,9 +26,19 @@ const Sidebar = ({ darkMode, setDarkMode, chat, setChat }) => {
               <MdOutlineDarkMode size={20} className="text-gray-700" />
             )}
           </button>
-          <button>
-            <CiSettings size={20} className="ml-2" />
-          </button>
+          <div className="relative mt-2.5">
+            <button onClick={() => setDropDown((prev) => !prev)}>
+              <CiSettings size={20} className="ml-2" />
+            </button>
+            {dropDown && (
+              <div className="absolute bg-white border border-gray-200 shadow-sm w-40 px-3 py-2 right-0 text-gray-600 dark:bg-gray-800 dark:text-white dark:border-gray-600 z-50 transform transition-transform duration-300">
+                <Link to={'/login'} className="hover:text-blue-500 flex">
+                  <MdOutlineLogout size={20} className="mt-0.5 mr-1" />
+                  Logout
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <hr className="dark:border-gray-700" />
