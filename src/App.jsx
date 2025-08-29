@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import './App.css'
 import ChatRoom from './pages/ChatRoom'
+import Login from './pages/Login'
 
 function App() {
   return (
@@ -13,6 +14,14 @@ function App() {
             element={
               <>
                 <ChatRoom />
+              </>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <>
+                <Login />
               </>
             }
           />
