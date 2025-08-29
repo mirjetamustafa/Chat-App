@@ -5,9 +5,10 @@ import { GrAttachment } from 'react-icons/gr'
 import { GrEmoji } from 'react-icons/gr'
 import { FiSend } from 'react-icons/fi'
 import EmojiPicker from 'emoji-picker-react'
+import { GiHamburgerMenu } from 'react-icons/gi'
 import { useState } from 'react'
 
-const MessageInput = ({ chat, setChat }) => {
+const MessageInput = ({ chat, setChat, hamburgerMenu, setHamburgerMenu }) => {
   const [openEmoji, setOpenEmoji] = useState(false)
   const [text, setText] = useState('')
 
@@ -44,8 +45,14 @@ const MessageInput = ({ chat, setChat }) => {
               <button className="hover:bg-gray-100 p-4 rounded-full">
                 <BsCameraVideo size={20} />
               </button>
-              <button className="hover:bg-gray-100 p-4 rounded-full">
+              <button className="hover:bg-gray-100 p-4 rounded-full max-md:hidden">
                 <VscInfo size={20} />
+              </button>
+              <button
+                onClick={() => setHamburgerMenu(!hamburgerMenu)}
+                className="hover:bg-gray-100 p-4 rounded-full md:hidden"
+              >
+                <GiHamburgerMenu size={20} />
               </button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { MdOutlineLightMode } from 'react-icons/md'
 import { MdOutlineDarkMode } from 'react-icons/md'
 import { CiSettings } from 'react-icons/ci'
+import { useState } from 'react'
 
 const Sidebar = ({ darkMode, setDarkMode, chat, setChat }) => {
   return (
