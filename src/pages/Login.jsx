@@ -1,12 +1,28 @@
 import { useState } from 'react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdChatBubbleOutline } from 'react-icons/md'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
+import { SignInWithEmail } from '../action'
+import { connect } from 'react-redux'
 
-const Login = () => {
+const Login = (props) => {
   const [showPassword, setShowPassword] = useState(false)
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleEmailLogin = (e) => {
+    e.preventDefault()
+    if (!email || !password) {
+      alert('Please fill in all fields')
+      return
+    }
+    props.signInWithEmail(email, password)
+  }
+
   return (
     <div className="flex">
+      {props.user && <Navigate to="/" />}
       <div className="w-full h-screen pt-20 bg-gray-50">
         <div className="flex flex-col justify-center items-center ">
           <p className="bg-blue-100 text-blue-600 rounded-full p-3">
@@ -27,6 +43,7 @@ const Login = () => {
               </label>
               <input
                 type="email"
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none w-full p-2"
                 placeholder="name@example.com"
@@ -41,6 +58,7 @@ const Login = () => {
                 </label>
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none w-full p-2"
                   placeholder="••••••••"
@@ -80,7 +98,10 @@ const Login = () => {
                   Forgot your password?
                 </Link>
               </div>
-              <button className="bg-blue-600 w-full mt-8 text-white rounded-md px-2 py-1 hover:bg-blue-700">
+              <button
+                onClick={handleEmailLogin}
+                className="bg-blue-600 w-full mt-8 text-white rounded-md px-2 py-1 hover:bg-blue-700"
+              >
                 Sign in
               </button>
               <p className="text-gray-500 text-sm flex justify-center mt-5">
@@ -113,4 +134,15 @@ const Login = () => {
   )
 }
 
-export default Login
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  signInWithEmail: (email, password) =>
+    dispatch(SignInWithEmail(email, password)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

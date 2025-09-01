@@ -4,11 +4,16 @@ import { CiSettings } from 'react-icons/ci'
 import { MdOutlineLogout } from 'react-icons/md'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import { signOut } from 'firebase/auth'
+import { SignOutAPI } from '../action'
+import { connect } from 'react-redux'
 
-const Sidebar = ({ darkMode, setDarkMode, chat, setChat }) => {
+const Sidebar = ({ darkMode, setDarkMode, chat, setChat, user, signOut }) => {
   const [dropDown, setDropDown] = useState(false)
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-800 dark:text-white border dark:border-gray-700">
+      {!user && <Navigate to={'/login'} />}
       <div className="flex justify-between px-4 pt-6 pb-3">
         <div className="flex">
           <img
@@ -32,7 +37,11 @@ const Sidebar = ({ darkMode, setDarkMode, chat, setChat }) => {
             </button>
             {dropDown && (
               <div className="absolute bg-white border border-gray-200 shadow-sm w-40 px-3 py-2 right-0 text-gray-600 dark:bg-gray-800 dark:text-white dark:border-gray-600 z-50 transform transition-transform duration-300">
-                <Link to={'/login'} className="hover:text-blue-500 flex">
+                <Link
+                  onClick={() => signOut()}
+                  to={'/login'}
+                  className="hover:text-blue-500 flex"
+                >
                   <MdOutlineLogout size={20} className="mt-0.5 mr-1" />
                   Logout
                 </Link>
@@ -234,4 +243,14 @@ const Sidebar = ({ darkMode, setDarkMode, chat, setChat }) => {
   )
 }
 
-export default Sidebar
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  signOut: () => dispatch(SignOutAPI()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
