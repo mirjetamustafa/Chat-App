@@ -2,10 +2,32 @@ import { useState } from 'react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdChatBubbleOutline } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import { SignUpWthEmail } from '../action'
+import { connect } from 'react-redux'
 
-const CreateAccount = () => {
+const CreateAccount = (props) => {
   const [showPassword, setShowPassword] = useState(false)
   const [showPasswordd, setShowPasswordd] = useState(false)
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
+
+  const handleSignUp = () => {
+    props
+      .signUp(email, password, name)
+      .then(() => {
+        setSuccessMsg('You have successfylly registered!')
+        setErrorMsg('')
+      })
+      .catch((error) => {
+        setSuccessMsg('')
+        setErrorMsg('Registration failed: ' + error.message)
+      })
+  }
+
   return (
     <div className="flex">
       <div className="w-full h-screen pt-20 bg-gray-50">
@@ -17,6 +39,8 @@ const CreateAccount = () => {
           <p className="text-sm text-gray-600 mt-2">
             Join our chat platform and connect with others
           </p>
+          {successMsg && <p className="text-green-600"> {successMsg} </p>}
+          {errorMsg && <p className="text-red-600"> {errorMsg} </p>}
           <form action="" className="max-w-sm mx-auto w-full mt-9">
             <div className="mb-5">
               <label
@@ -28,6 +52,7 @@ const CreateAccount = () => {
               </label>
               <input
                 type="text"
+                onChange={(e) => setName(e.target.value)}
                 required
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none w-full p-2"
                 placeholder="John Doe"
@@ -42,6 +67,7 @@ const CreateAccount = () => {
               </label>
               <input
                 type="email"
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none w-full p-2"
                 placeholder="name@example.com"
@@ -56,6 +82,7 @@ const CreateAccount = () => {
                 </label>
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none w-full p-2"
                   placeholder="Create a strong password"
@@ -125,7 +152,11 @@ const CreateAccount = () => {
                   </Link>
                 </label>
               </div>
-              <button className="bg-blue-600 w-full mt-8 text-white rounded-md px-2 py-1 hover:bg-blue-700">
+              <button
+                type="button"
+                onClick={handleSignUp}
+                className="bg-blue-600 w-full mt-8 text-white rounded-md px-2 py-1 hover:bg-blue-700"
+              >
                 Create account
               </button>
               <p className="text-gray-500 text-sm flex justify-center mt-5">
@@ -158,4 +189,16 @@ const CreateAccount = () => {
   )
 }
 
-export default CreateAccount
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  signUp: (email, password, name) => {
+    return SignUpWthEmail(email, password, name)(dispatch)
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateAccount)
