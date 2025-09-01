@@ -26,9 +26,9 @@ const Sidebar = ({ darkMode, setDarkMode, chat, setChat }) => {
               <MdOutlineDarkMode size={20} className="text-gray-700" />
             )}
           </button>
-          <div className="relative mt-2.5">
+          <div className="relative mt-2.5 ">
             <button onClick={() => setDropDown((prev) => !prev)}>
-              <CiSettings size={20} className="ml-2" />
+              <CiSettings size={20} className="ml-2 " />
             </button>
             {dropDown && (
               <div className="absolute bg-white border border-gray-200 shadow-sm w-40 px-3 py-2 right-0 text-gray-600 dark:bg-gray-800 dark:text-white dark:border-gray-600 z-50 transform transition-transform duration-300">

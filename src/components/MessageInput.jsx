@@ -39,18 +39,18 @@ const MessageInput = ({ chat, setChat, hamburgerMenu, setHamburgerMenu }) => {
             </div>
 
             <div className="flex">
-              <button className="hover:bg-gray-100 p-4 rounded-full">
+              <button className="hover:bg-gray-100 p-4 rounded-full dark:hover:bg-gray-700">
                 <FiPhone size={20} />
               </button>
-              <button className="hover:bg-gray-100 p-4 rounded-full">
+              <button className="hover:bg-gray-100 p-4 rounded-full dark:hover:bg-gray-700">
                 <BsCameraVideo size={20} />
               </button>
-              <button className="hover:bg-gray-100 p-4 rounded-full max-md:hidden">
+              <button className="hover:bg-gray-100 p-4 rounded-full max-md:hidden dark:hover:bg-gray-700">
                 <VscInfo size={20} />
               </button>
               <button
                 onClick={() => setHamburgerMenu(!hamburgerMenu)}
-                className="hover:bg-gray-100 p-4 rounded-full md:hidden"
+                className="hover:bg-gray-100 p-4 rounded-full md:hidden dark:hover:bg-gray-700"
               >
                 <GiHamburgerMenu size={20} />
               </button>
