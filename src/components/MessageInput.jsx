@@ -7,6 +7,7 @@ import { FiSend } from 'react-icons/fi'
 import EmojiPicker from 'emoji-picker-react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const MessageInput = ({ chat, setChat, hamburgerMenu, setHamburgerMenu }) => {
   const [openEmoji, setOpenEmoji] = useState(false)
@@ -17,6 +18,8 @@ const MessageInput = ({ chat, setChat, hamburgerMenu, setHamburgerMenu }) => {
     setOpenEmoji(false)
   }
 
+  const user = useSelector((state) => state.userState.user)
+
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-800 dark:text-white ">
       {chat === 'conversation' ? (
@@ -24,15 +27,15 @@ const MessageInput = ({ chat, setChat, hamburgerMenu, setHamburgerMenu }) => {
           <div className="flex justify-between px-5 py-3 dark:bg-gray-800 dark:text-white">
             <div className="flex">
               <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
+                src={user?.photo || 'https://via.placeholder.com/50'}
+                alt={user?.name || 'User'}
                 className=" rounded-full relative"
                 width={50}
               />
 
               <div className="">
                 <h2 className="font-semibold text-sm ml-2 mt-1">
-                  Sarah Johnson
+                  {user?.name || 'Unknown User'}
                 </h2>
                 <h2 className="text-xs text-gray-400 ml-2 mt-1">Online</h2>
               </div>

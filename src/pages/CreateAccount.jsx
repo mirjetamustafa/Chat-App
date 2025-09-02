@@ -12,12 +12,13 @@ const CreateAccount = (props) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [photo, setPhoto] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
 
   const handleSignUp = () => {
     props
-      .signUp(email, password, name)
+      .signUp(email, password, name, photo)
       .then(() => {
         setSuccessMsg('You have successfylly registered!')
         setErrorMsg('')
@@ -133,6 +134,20 @@ const CreateAccount = (props) => {
                 </button>
               </div>
 
+              <label
+                htmlFor="photo"
+                className="flex block my-3 text-sm font-medium text-gray-900 "
+              >
+                Profile Photo URL
+              </label>
+
+              <input
+                type="text"
+                onChange={(e) => setPhoto(e.target.value)}
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none w-full p-2"
+                placeholder="https://example.com/myphoto.jpg"
+              />
+
               <div className="flex mt-5">
                 <input
                   type="checkbox"
@@ -196,8 +211,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  signUp: (email, password, name) => {
-    return SignUpWthEmail(email, password, name)(dispatch)
+  signUp: (email, password, name, photo) => {
+    return SignUpWthEmail(email, password, name, photo)(dispatch)
   },
 })
 
