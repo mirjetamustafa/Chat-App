@@ -17,11 +17,13 @@ const Sidebar = ({ darkMode, setDarkMode, chat, setChat, user, signOut }) => {
       <div className="flex justify-between px-4 pt-6 pb-3">
         <div className="flex">
           <img
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
+            src={user?.photo || 'https://via.placeholder.com/50'}
+            alt={user?.name || 'User'}
             className="w-10 rounded-full"
           />
-          <span className="mt-1 mx-2 text-xl font-semibold">You</span>
+          <span className="mt-1 mx-2 font-semibold">
+            {user?.name || 'Unknown User'}
+          </span>
         </div>
         <div className="flex">
           <button onClick={() => setDarkMode(!darkMode)}>
