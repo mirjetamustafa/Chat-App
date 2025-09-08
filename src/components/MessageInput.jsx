@@ -1,34 +1,87 @@
 import { FiPhone } from 'react-icons/fi'
 import { BsCameraVideo } from 'react-icons/bs'
 import { VscInfo } from 'react-icons/vsc'
-import { GrAttachment } from 'react-icons/gr'
-import { GrEmoji } from 'react-icons/gr'
+import { GrAttachment, GrEmoji } from 'react-icons/gr'
 import { FiSend } from 'react-icons/fi'
 import EmojiPicker from 'emoji-picker-react'
 import { GiHamburgerMenu } from 'react-icons/gi'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot,
+} from 'firebase/firestore'
+import db from '../lib/firebase'
 
-const MessageInput = ({ chat, setChat, hamburgerMenu, setHamburgerMenu }) => {
+const MessageInput = ({
+  chat,
+  setChat,
+  hamburgerMenu,
+  setHamburgerMenu,
+  selectedUser,
+}) => {
   const [openEmoji, setOpenEmoji] = useState(false)
   const [text, setText] = useState('')
+  const [messages, setMessages] = useState([])
+
+  const user = useSelector((state) => state.userState.user)
+
+  const createChatId = (uid1, uid2) => {
+    return [uid1, uid2].sort().join('_')
+  }
+
+  useEffect(() => {
+    if (!selectedUser || !user) return
+    const chatId = createChatId(user.uid, selectedUser.uid)
+    const q = query(
+      collection(db, 'chats', chatId, 'messages'),
+      orderBy('timestamp', 'asc')
+    )
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      let msgs = []
+      snapshot.forEach((doc) => msgs.push({ id: doc.id, ...doc.data() }))
+      setMessages(msgs)
+    })
+    return () => unsubscribe()
+  }, [selectedUser, user])
+
+  const handleSend = async (e) => {
+    e.preventDefault()
+    if (!text.trim() || !selectedUser) return
+
+    const chatId = createChatId(user.uid, selectedUser.uid)
+
+    try {
+      await addDoc(collection(db, 'chats', chatId, 'messages'), {
+        senderId: user.uid,
+        text,
+        timestamp: serverTimestamp(),
+      })
+      setText('')
+    } catch (err) {
+      console.error('Error sending message: ', err)
+    }
+  }
 
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji)
     setOpenEmoji(false)
   }
 
-  const user = useSelector((state) => state.userState.user)
-
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-800 dark:text-white ">
-      {chat === 'conversation' ? (
+      {chat === 'conversation' && selectedUser ? (
         <>
           <div className="flex justify-between px-5 py-3 dark:bg-gray-800 dark:text-white">
             <div className="flex">
               <img
-                src={user?.photo || 'https://via.placeholder.com/50'}
-                alt={user?.name || 'User'}
+                src={selectedUser?.photo || 'https://via.placeholder.com/50'}
+                alt={selectedUser?.name || 'User'}
                 className=" rounded-full relative"
                 width={50}
               />
@@ -64,145 +117,41 @@ const MessageInput = ({ chat, setChat, hamburgerMenu, setHamburgerMenu }) => {
 
           <div className=" flex flex-col content-between">
             <div className="h-[550px] overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
-              <div className="flex justify-start">
-                <div className="mr-4 ">
-                  <img
-                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                    className=" rounded-full w-[50px] h-[50px]"
-                  />
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${
+                    msg.senderId === user.uid ? 'justify-end' : 'justify-start'
+                  } mb-3`}
+                >
+                  <div className="mr-4 ">
+                    {msg.senderId !== user.uid && (
+                      <img
+                        src={
+                          selectedUser?.photo ||
+                          'https://via.placeholder.com/50'
+                        }
+                        alt={selectedUser?.name || 'User'}
+                        className=" rounded-full w-[50px] h-[50px]"
+                      />
+                    )}
+                  </div>
+                  <div
+                    className={`max-w-[70%]  rounded-lg p-3 dark:text-white shadow-sm ${
+                      msg.senderId === user.uid
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-white dark:bg-gray-800'
+                    }`}
+                  >
+                    <p className="m-2">{msg.text}</p>
+                    <span className="flex justify-end text-xs text-gray-400 mt-1">
+                      {msg.timestamp?.toDate().toLocaleTimeString() || ''}
+                    </span>
+                  </div>
                 </div>
-                <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
-                  <p className="m-2">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum illo maxime voluptatem recusandae saepe, distinctio,
-                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
-                    Voluptas rem corrupti perferendis sequi!
-                  </p>
-                  <span className="flex justify-end text-xs text-gray-400 mt-1">
-                    11:45 PM
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-end m-3">
-                <div className="max-w-[70%]  rounded-lg p-3 bg-blue-500 dark:text-white shadow-sm">
-                  <p className="text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum illo maxime voluptatem recusandae saepe, distinctio,
-                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
-                    Voluptas rem corrupti perferendis sequi!
-                  </p>
-                  <span className="flex justify-end text-xs text-blue-300 mt-1">
-                    11:45 PM
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-start">
-                <div className="mr-4 ">
-                  <img
-                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                    className=" rounded-full w-[50px] h-[50px]"
-                  />
-                </div>
-                <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
-                  <p className="m-2">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum illo maxime voluptatem recusandae saepe, distinctio,
-                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
-                    Voluptas rem corrupti perferendis sequi!
-                  </p>
-                  <span className="flex justify-end text-xs text-gray-400 mt-1">
-                    11:45 PM
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-end m-3">
-                <div className="max-w-[70%]  rounded-lg p-3 bg-blue-500 dark:text-white shadow-sm">
-                  <p className="text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum illo maxime voluptatem recusandae saepe, distinctio,
-                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
-                    Voluptas rem corrupti perferendis sequi!
-                  </p>
-                  <span className="flex justify-end text-xs text-blue-300 mt-1">
-                    11:45 PM
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-start">
-                <div className="mr-4 ">
-                  <img
-                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                    className=" rounded-full w-[50px] h-[50px]"
-                  />
-                </div>
-                <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
-                  <p className="m-2">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum illo maxime voluptatem recusandae saepe, distinctio,
-                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
-                    Voluptas rem corrupti perferendis sequi!
-                  </p>
-                  <span className="flex justify-end text-xs text-gray-400 mt-1">
-                    11:45 PM
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-end m-3">
-                <div className="max-w-[70%]  rounded-lg p-3 bg-blue-500 dark:text-white shadow-sm">
-                  <p className="text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum illo maxime voluptatem recusandae saepe, distinctio,
-                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
-                    Voluptas rem corrupti perferendis sequi!
-                  </p>
-                  <span className="flex justify-end text-xs text-blue-300 mt-1">
-                    11:45 PM
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-start">
-                <div className="mr-4 ">
-                  <img
-                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                    className=" rounded-full w-[50px] h-[50px]"
-                  />
-                </div>
-                <div className="max-w-[70%]  rounded-lg p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm">
-                  <p className="m-2">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum illo maxime voluptatem recusandae saepe, distinctio,
-                    ducimus minus ex enim quidem totam vel aliquam, quod nemo?
-                    Voluptas rem corrupti perferendis sequi!
-                  </p>
-                  <span className="flex justify-end text-xs text-gray-400 mt-1">
-                    11:45 PM
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-end m-3">
-                <div className="max-w-[70%]  rounded-lg p-3 bg-blue-500 dark:text-white shadow-sm">
-                  <p className="text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum illo maxime voluptatem
-                  </p>
-                  <span className="flex justify-end text-xs text-blue-300 mt-1">
-                    11:45 PM
-                  </span>
-                </div>
-              </div>
+              ))}
             </div>
-            <form className="m-5">
+            <form className="m-5" onSubmit={handleSend}>
               <label htmlFor="chat" className="sr-only">
                 Type message
               </label>
