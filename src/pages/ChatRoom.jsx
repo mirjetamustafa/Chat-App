@@ -1,11 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { collection, onSnapshot } from 'firebase/firestore'
+import db from '../lib/firebase'
 import Sidebar from '../components/Sidebar'
 import MessageInput from '../components/MessageInput'
+import { useSelector } from 'react-redux'
+import { setUser } from '../action'
 
 const ChatRoom = () => {
   const [darkMode, setDarkMode] = useState(false)
   const [chat, setChat] = useState('conversation')
   const [hamburgerMenu, setHamburgerMenu] = useState(false)
+  const [users, setUsers] = useState([])
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [chat1, setChat1] = useState(null)
+
+  const currentUser = useSelector((state) => state.userState.user)
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'users'), (snapshot) => {
+      let userList = []
+      snapshot.forEach((doc) => {
+        userList.push({ id: doc.id, ...doc.data() })
+      })
+      setUsers(userList.filter((u) => u.uid !== currentUser.uid))
+    })
+    return () => unsub()
+  }, [currentUser])
 
   useEffect(() => {
     if (darkMode) {
@@ -42,6 +62,9 @@ const ChatRoom = () => {
           setChat={setChat}
           hamburgerMenu={hamburgerMenu}
           setHamburgerMenu={setHamburgerMenu}
+          users={users}
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
         />
       </div>
       <div className="flex-1 ">
@@ -50,6 +73,7 @@ const ChatRoom = () => {
           setChat={setChat}
           hamburgerMenu={hamburgerMenu}
           setHamburgerMenu={setHamburgerMenu}
+          selectedUser={selectedUser}
         />
       </div>
     </div>

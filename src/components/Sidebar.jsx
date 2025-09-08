@@ -9,7 +9,17 @@ import { signOut } from 'firebase/auth'
 import { SignOutAPI } from '../action'
 import { connect } from 'react-redux'
 
-const Sidebar = ({ darkMode, setDarkMode, chat, setChat, user, signOut }) => {
+const Sidebar = ({
+  darkMode,
+  setDarkMode,
+  chat,
+  setChat,
+  user,
+  signOut,
+  users = [],
+  setSelectedUser,
+  selectedUser,
+}) => {
   const [dropDown, setDropDown] = useState(false)
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-800 dark:text-white border dark:border-gray-700">
@@ -17,7 +27,7 @@ const Sidebar = ({ darkMode, setDarkMode, chat, setChat, user, signOut }) => {
       <div className="flex justify-between px-4 pt-6 pb-3">
         <div className="flex">
           <img
-            src={user?.photo || 'https://via.placeholder.com/50'}
+            src={user?.photo || 'https://placehold.co/50x50'}
             alt={user?.name || 'User'}
             className="w-10 rounded-full"
           />
@@ -90,7 +100,55 @@ const Sidebar = ({ darkMode, setDarkMode, chat, setChat, user, signOut }) => {
           Conversations
         </h4>
 
-        <div
+        <ul>
+          {users.map((u) => (
+            <li
+              key={u.uid}
+              className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${
+                selectedUser?.uid === u.uid
+                  ? 'bg-gray-200 dark:bg-gray-700'
+                  : ''
+              }`}
+              onClick={() => {
+                setSelectedUser(u)
+                // setChat('conversation')
+              }}
+            >
+              <div className="p-2 cursor-pointer">
+                <div className="flex justify-between">
+                  <div className="flex relative">
+                    <img
+                      src={u.photo || 'https://placehold.co/50x50'}
+                      alt={u.name}
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <span className="absolute bottom-1 left-7 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+
+                    <div className="flex flex-col ml-3  w-full">
+                      <div className="flex justify-between items-center w-full">
+                        <h2 className="font-semibold text-sm truncate">
+                          {u.name}
+                        </h2>
+                        <span className="text-xs text-gray-400 whitespace-nowrap ml-10">
+                          12:43 PM
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between items-center w-full mt-1">
+                        <h2 className="text-xs text-gray-400 truncate">
+                          {u.name}
+                        </h2>
+                        <span className="text-sm whitespace-nowrap">0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {/* <div
           className="mt-4 hover:bg-gray-100 p-2 cursor-pointer"
           onClick={() => setChat('conversation')}
         >
@@ -239,7 +297,7 @@ const Sidebar = ({ darkMode, setDarkMode, chat, setChat, user, signOut }) => {
               <span className="text-sm mt-1 pl-10">0</span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

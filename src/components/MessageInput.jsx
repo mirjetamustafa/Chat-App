@@ -80,7 +80,7 @@ const MessageInput = ({
           <div className="flex justify-between px-5 py-3 dark:bg-gray-800 dark:text-white">
             <div className="flex">
               <img
-                src={selectedUser?.photo || 'https://via.placeholder.com/50'}
+                src={selectedUser?.photo || 'https://placehold.co/50x50'}
                 alt={selectedUser?.name || 'User'}
                 className=" rounded-full relative"
                 width={50}
@@ -88,7 +88,7 @@ const MessageInput = ({
 
               <div className="">
                 <h2 className="font-semibold text-sm ml-2 mt-1">
-                  {user?.name || 'Unknown User'}
+                  {selectedUser?.name || 'Unknown User'}
                 </h2>
                 <h2 className="text-xs text-gray-400 ml-2 mt-1">Online</h2>
               </div>
@@ -200,14 +200,8 @@ const MessageInput = ({
             </form>
           </div>
         </>
-      ) : chat === 'conversation2' ? (
-        <h1 className="text-blue-500">Michael</h1>
-      ) : chat === 'conversation3' ? (
-        <h1 className="text-green-500">Emiy</h1>
-      ) : chat === 'conversation4' ? (
-        <h1 className="text-orange-500">David</h1>
       ) : (
-        <h1 className="text-yellow-500">Sophia</h1>
+        <h1 className="text-blue-500"></h1>
       )}
     </div>
   )
