@@ -6,67 +6,30 @@ import { FiSend } from 'react-icons/fi'
 import EmojiPicker from 'emoji-picker-react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  query,
-  orderBy,
-  onSnapshot,
-} from 'firebase/firestore'
-import db from '../lib/firebase'
+// import { useSelector } from 'react-redux'
+// import {
+//   addDoc,
+//   collection,
+//   serverTimestamp,
+//   query,
+//   orderBy,
+//   onSnapshot,
+// } from 'firebase/firestore'
+// import db from '../lib/firebase'
 
 const MessageInput = ({
   chat,
-  setChat,
+  handleSend,
   hamburgerMenu,
   setHamburgerMenu,
   selectedUser,
+  messages,
+  setMessages,
+  text,
+  setText,
+  user,
 }) => {
   const [openEmoji, setOpenEmoji] = useState(false)
-  const [text, setText] = useState('')
-  const [messages, setMessages] = useState([])
-
-  const user = useSelector((state) => state.userState.user)
-
-  const createChatId = (uid1, uid2) => {
-    return [uid1, uid2].sort().join('_')
-  }
-
-  useEffect(() => {
-    if (!selectedUser || !user) return
-    const chatId = createChatId(user.uid, selectedUser.uid)
-    const q = query(
-      collection(db, 'chats', chatId, 'messages'),
-      orderBy('timestamp', 'asc')
-    )
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      let msgs = []
-      snapshot.forEach((doc) => msgs.push({ id: doc.id, ...doc.data() }))
-      setMessages(msgs)
-    })
-    return () => unsubscribe()
-  }, [selectedUser, user])
-
-  const handleSend = async (e) => {
-    e.preventDefault()
-    if (!text.trim() || !selectedUser) return
-
-    const chatId = createChatId(user.uid, selectedUser.uid)
-
-    try {
-      await addDoc(collection(db, 'chats', chatId, 'messages'), {
-        senderId: user.uid,
-        text,
-        timestamp: serverTimestamp(),
-      })
-      setText('')
-    } catch (err) {
-      console.error('Error sending message: ', err)
-    }
-  }
 
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji)
@@ -90,7 +53,7 @@ const MessageInput = ({
                 <h2 className="font-semibold text-sm ml-2 mt-1">
                   {selectedUser?.name || 'Unknown User'}
                 </h2>
-                <h2 className="text-xs text-gray-400 ml-2 mt-1">Online</h2>
+                <h2 className="text-xs text-gray-400 ml-2 mt-1">online</h2>
               </div>
             </div>
 

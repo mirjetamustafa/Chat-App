@@ -21,8 +21,10 @@ const Sidebar = ({
   selectedUser,
 }) => {
   const [dropDown, setDropDown] = useState(false)
+  console.log('User from Redux:', user)
+
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-gray-800 dark:text-white border dark:border-gray-700">
+    <div className="min-h-screen  bg-white text-black dark:bg-gray-800 dark:text-white border dark:border-gray-700">
       {!user && <Navigate to={'/login'} />}
       <div className="flex justify-between px-4 pt-6 pb-3">
         <div className="flex">
@@ -95,7 +97,7 @@ const Sidebar = ({
 
       <hr className="dark:border-gray-700" />
 
-      <div className="">
+      <div className="overflow-y-scroll h-[570px]">
         <h4 className="mx-2 my-4 text-xs font-semibold text-gray-500 uppercase dark:text-gray-400">
           Conversations
         </h4>
@@ -122,7 +124,11 @@ const Sidebar = ({
                       alt={u.name}
                       className="w-10 h-10 rounded-full"
                     />
-                    <span className="absolute bottom-1 left-7 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+                    {u.lastLogin ? (
+                      <span className="absolute bottom-1 left-7 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+                    ) : (
+                      ''
+                    )}
 
                     <div className="flex flex-col ml-3  w-full">
                       <div className="flex justify-between items-center w-full">
@@ -130,7 +136,12 @@ const Sidebar = ({
                           {u.name}
                         </h2>
                         <span className="text-xs text-gray-400 whitespace-nowrap ml-10">
-                          12:43 PM
+                          {u.lastLogin && u.lastLogin.toDate
+                            ? u.lastLogin.toDate().toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })
+                            : 'Offline'}
                         </span>
                       </div>
 

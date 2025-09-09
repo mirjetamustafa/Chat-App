@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react'
-import { collection, onSnapshot } from 'firebase/firestore'
 import db from '../lib/firebase'
 import Sidebar from '../components/Sidebar'
 import MessageInput from '../components/MessageInput'
 import { useSelector } from 'react-redux'
 import { setUser } from '../action'
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot,
+  setDoc,
+  doc,
+} from 'firebase/firestore'
 
 const ChatRoom = () => {
   const [darkMode, setDarkMode] = useState(false)
@@ -12,7 +21,49 @@ const ChatRoom = () => {
   const [hamburgerMenu, setHamburgerMenu] = useState(false)
   const [users, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
-  const [chat1, setChat1] = useState(null)
+
+  const [text, setText] = useState('')
+  const [messages, setMessages] = useState([])
+
+  const user = useSelector((state) => state.userState.user)
+
+  const createChatId = (uid1, uid2) => {
+    return [uid1, uid2].sort().join('_')
+  }
+
+  useEffect(() => {
+    if (!selectedUser || !user) return
+    const chatId = createChatId(user.uid, selectedUser.uid)
+    const q = query(
+      collection(db, 'chats', chatId, 'messages'),
+      orderBy('timestamp', 'asc')
+    )
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      let msgs = []
+      snapshot.forEach((doc) => msgs.push({ id: doc.id, ...doc.data() }))
+      setMessages(msgs)
+    })
+    return () => unsubscribe()
+  }, [selectedUser, user])
+
+  const handleSend = async (e) => {
+    e.preventDefault()
+    if (!text.trim() || !selectedUser) return
+
+    const chatId = createChatId(user.uid, selectedUser.uid)
+
+    try {
+      await addDoc(collection(db, 'chats', chatId, 'messages'), {
+        senderId: user.uid,
+        text,
+        timestamp: serverTimestamp(),
+      })
+      setText('')
+    } catch (err) {
+      console.error('Error sending message: ', err)
+    }
+  }
 
   const currentUser = useSelector((state) => state.userState.user)
 
@@ -25,6 +76,31 @@ const ChatRoom = () => {
       setUsers(userList.filter((u) => u.uid !== currentUser.uid))
     })
     return () => unsub()
+  }, [currentUser])
+
+  const saveLoginTime = async (user) => {
+    try {
+      await setDoc(
+        doc(db, 'users', user.uid),
+        {
+          name: user.displayName,
+          email: user.email,
+          photo: user.photoURL,
+          lastLogin: serverTimestamp(),
+        },
+        { merge: true }
+      )
+      console.log('Last login updated for:', user.uid)
+    } catch (err) {
+      console.error('Error saving login time:', err)
+    }
+  }
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log('Calling saveLoginTime for:', currentUser.uid)
+      saveLoginTime(currentUser)
+    }
   }, [currentUser])
 
   useEffect(() => {
@@ -65,6 +141,10 @@ const ChatRoom = () => {
           users={users}
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
+          messages={messages}
+          setMessages={setMessages}
+          text={text}
+          setText={setText}
         />
       </div>
       <div className="flex-1 ">
@@ -74,6 +154,12 @@ const ChatRoom = () => {
           hamburgerMenu={hamburgerMenu}
           setHamburgerMenu={setHamburgerMenu}
           selectedUser={selectedUser}
+          messages={messages}
+          setMessages={setMessages}
+          text={text}
+          setText={setText}
+          handleSend={handleSend}
+          user={user}
         />
       </div>
     </div>

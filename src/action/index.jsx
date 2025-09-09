@@ -1,7 +1,13 @@
 import db, { auth } from '../lib/firebase'
 import { SET_USER } from './actionType'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 
 export const setUser = (payload) => ({
@@ -45,10 +51,23 @@ export function SignInWithEmail(email, password, name, photo) {
       const docRef = doc(db, 'users', user.uid)
       const docSnap = await getDoc(docRef)
 
-      let firestoreData = {}
+      // let firestoreData = {}
       if (docSnap.exists()) {
-        firestoreData = docSnap.data()
+        //firestoreData = docSnap.data()
+        await updateDoc(docRef, {
+          lastLogin: serverTimestamp(),
+        })
+      } else {
+        await setDoc(docRef, {
+          name: user.displayName || '',
+          email: user.email,
+          photo: user.photoURL || '',
+          uid: user.uid,
+          lastLogin: serverTimestamp(),
+        })
       }
+
+      const firestoreData = (await getDoc(docRef)).data()
 
       const cleanUser = {
         name: user.displayName || firestoreData.name || '',
