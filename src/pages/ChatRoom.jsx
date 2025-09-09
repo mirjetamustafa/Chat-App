@@ -13,6 +13,7 @@ import {
   onSnapshot,
   setDoc,
   doc,
+  limit,
 } from 'firebase/firestore'
 
 const ChatRoom = () => {
@@ -25,15 +26,15 @@ const ChatRoom = () => {
   const [text, setText] = useState('')
   const [messages, setMessages] = useState([])
 
-  const user = useSelector((state) => state.userState.user)
+  const currentUser = useSelector((state) => state.userState.user)
 
   const createChatId = (uid1, uid2) => {
     return [uid1, uid2].sort().join('_')
   }
 
   useEffect(() => {
-    if (!selectedUser || !user) return
-    const chatId = createChatId(user.uid, selectedUser.uid)
+    if (!selectedUser || !currentUser) return
+    const chatId = createChatId(currentUser.uid, selectedUser.uid)
     const q = query(
       collection(db, 'chats', chatId, 'messages'),
       orderBy('timestamp', 'asc')
@@ -45,17 +46,49 @@ const ChatRoom = () => {
       setMessages(msgs)
     })
     return () => unsubscribe()
-  }, [selectedUser, user])
+  }, [selectedUser, currentUser])
+
+  useEffect(() => {
+    if (!currentUser) return
+    const unsubscribers = []
+
+    users.forEach((u) => {
+      const chatId = createChatId(currentUser.uid, u.uid)
+      const q = query(
+        collection(db, 'chats', chatId, 'messages'),
+        orderBy('timestamp', 'desc'),
+        limit(1)
+      )
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const lastMessage = snapshot.docs[0].data()
+          setUsers((prevUsers) =>
+            prevUsers.map((usr) =>
+              usr.uid === u.uid
+                ? {
+                    ...usr,
+                    unreadCount:
+                      lastMessage.senderId !== currentUser.uid ? 1 : 0,
+                  }
+                : usr
+            )
+          )
+        }
+      })
+      unsubscribers.push(unsubscribe)
+    })
+    return () => unsubscribers.forEach((unsub) => unsub())
+  }, [users, currentUser])
 
   const handleSend = async (e) => {
     e.preventDefault()
     if (!text.trim() || !selectedUser) return
 
-    const chatId = createChatId(user.uid, selectedUser.uid)
+    const chatId = createChatId(currentUser.uid, selectedUser.uid)
 
     try {
       await addDoc(collection(db, 'chats', chatId, 'messages'), {
-        senderId: user.uid,
+        senderId: currentUser.uid,
         text,
         timestamp: serverTimestamp(),
       })
@@ -64,8 +97,6 @@ const ChatRoom = () => {
       console.error('Error sending message: ', err)
     }
   }
-
-  const currentUser = useSelector((state) => state.userState.user)
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'users'), (snapshot) => {
@@ -139,6 +170,7 @@ const ChatRoom = () => {
           hamburgerMenu={hamburgerMenu}
           setHamburgerMenu={setHamburgerMenu}
           users={users}
+          setUsers={setUsers}
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
           messages={messages}
@@ -159,7 +191,7 @@ const ChatRoom = () => {
           text={text}
           setText={setText}
           handleSend={handleSend}
-          user={user}
+          user={currentUser}
         />
       </div>
     </div>

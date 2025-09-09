@@ -17,6 +17,7 @@ const Sidebar = ({
   user,
   signOut,
   users = [],
+  setUsers,
   setSelectedUser,
   selectedUser,
 }) => {
@@ -113,7 +114,6 @@ const Sidebar = ({
               }`}
               onClick={() => {
                 setSelectedUser(u)
-                // setChat('conversation')
               }}
             >
               <div className="p-2 cursor-pointer">
@@ -149,7 +149,15 @@ const Sidebar = ({
                         <h2 className="text-xs text-gray-400 truncate">
                           {u.name}
                         </h2>
-                        <span className="text-sm whitespace-nowrap">0</span>
+                        {u.unreadCount > 0 ? (
+                          <span className="text-xs font-semibold bg-blue-600 rounded-full text-white px-2 py-0.5 whitespace-nowrap">
+                            {u.unreadCount}
+                          </span>
+                        ) : (
+                          <span className="text-xs font-semibold px-2 py-0.5 whitespace-nowrap">
+                            0
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
