@@ -27,6 +27,7 @@ const Sidebar = ({
   return (
     <div className="min-h-screen  bg-white text-black dark:bg-gray-800 dark:text-white border dark:border-gray-700">
       {!user && <Navigate to={'/login'} />}
+      {/* {!user && <Navigate to={'/'} />} */}
       <div className="flex justify-between px-4 pt-6 pb-3">
         <div className="flex">
           <img
