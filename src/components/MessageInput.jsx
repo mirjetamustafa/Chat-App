@@ -5,17 +5,7 @@ import { GrAttachment, GrEmoji } from 'react-icons/gr'
 import { FiSend } from 'react-icons/fi'
 import EmojiPicker from 'emoji-picker-react'
 import { GiHamburgerMenu } from 'react-icons/gi'
-import { useEffect, useState } from 'react'
-// import { useSelector } from 'react-redux'
-// import {
-//   addDoc,
-//   collection,
-//   serverTimestamp,
-//   query,
-//   orderBy,
-//   onSnapshot,
-// } from 'firebase/firestore'
-// import db from '../lib/firebase'
+import { useState } from 'react'
 
 const MessageInput = ({
   chat,
